@@ -3,8 +3,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
+using Cysharp.Text;
 using YAXLib.Attributes;
 using YAXLib.Exceptions;
+using YAXLib.Pooling.ObjectPools;
 using YAXLib.Pooling.SpecializedPools;
 
 namespace YAXLib;
@@ -68,7 +71,8 @@ internal class EnumWrapper
 
         if (components.Length > 0)
         {
-            using var pooledObject = StringBuilderPool.Instance.Get(out var sb);
+            //mc++ using PooledObject<StringBuilder> pooledObject = StringBuilderPool.Instance.Get(out var sb);
+            var sb = ZString.CreateStringBuilder();
             var realName = FindRealNameFromAlias(components[0]);
             sb.Append(realName);
 
@@ -105,7 +109,8 @@ internal class EnumWrapper
 
         if (components.Length > 1)
         {
-            using var pooledObject = StringBuilderPool.Instance.Get(out var result);
+            //mc++ using var pooledObject = StringBuilderPool.Instance.Get(out var result);
+            var result = ZString.CreateStringBuilder();
             for (var i = 0; i < components.Length; i++)
             {
                 if (i != 0)

@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
+using Cysharp.Text;
 using YAXLib.Pooling.SpecializedPools;
 
 namespace YAXLib;
@@ -32,12 +33,16 @@ internal static class StringUtils
         // replace all back-slashes to slash
         elemAddr = elemAddr.Replace('\\', '/');
 
-        using var pooledObject = StringBuilderPool.Instance.Get(out var sb);
-        sb.Capacity = elemAddr.Length;
+        //mc++ using var pooledObject = StringBuilderPool.Instance.Get(out var sb);
+        var sb = ZString.CreateStringBuilder();
+        //mc++ sb.Capacity = elemAddr.Length;
         var steps = elemAddr.SplitPathNamespaceSafe();
         foreach (var step in steps) sb.Append("/" + RefineSingleElement(step));
 
-        return sb.Remove(0, 1).ToString();
+        //mc++ return sb.Remove(0, 1).ToString();
+        sb.Remove(0, 1);
+
+        return sb.ToString();
     }
 
     /// <summary>
@@ -102,10 +107,11 @@ internal static class StringUtils
 #endif
         }
 
-        using var pooledObject = StringBuilderPool.Instance.Get(out var sb);
-        sb.Capacity = elemName.Length;
+        //mc++ using var pooledObject = StringBuilderPool.Instance.Get(out var sb);
+        var sb = ZString.CreateStringBuilder();
+        //mc++ sb.Capacity = elemName.Length;
 
-        // This uses the rules defined in http://www.w3.org/TR/xml/#NT-Name. 
+        // This uses the rules defined in http://www.w3.org/TR/xml/#NT-Name.
         // Thanks go to [@asbjornu] for pointing to the W3C standard
         for (var i = 0; i < elemName.Length; i++)
             if (i == 0)
@@ -118,10 +124,10 @@ internal static class StringUtils
 
     private static bool IsValidNameStartChar(char ch)
     {
-        // This uses the rules defined in http://www.w3.org/TR/xml/#NT-Name. 
+        // This uses the rules defined in http://www.w3.org/TR/xml/#NT-Name.
         // However colon (:) has been removed from the set of allowed characters,
         // because it is reserved for separating namespace prefix and XML-entity names.
-        if ( //ch == ':' || 
+        if ( //ch == ':' ||
             ch == '_' ||
             IsInRange(ch, 'A', 'Z') || IsInRange(ch, 'a', 'z') ||
             IsInRange(ch, '\u00C0', '\u00D6') ||
@@ -272,7 +278,8 @@ internal static class StringUtils
     /// <returns>the string corresponding to the given array dimensions</returns>
     public static string GetArrayDimsString(int[] dims)
     {
-        var sb = new StringBuilder();
+        //mc++ var sb = new StringBuilder();
+        var sb = ZString.CreateStringBuilder();
 
         for (var i = 0; i < dims.Length; i++)
         {

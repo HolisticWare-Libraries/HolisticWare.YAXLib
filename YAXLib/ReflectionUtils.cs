@@ -10,6 +10,7 @@ using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using Cysharp.Text;
 using YAXLib.Caching;
 using YAXLib.Options;
 using YAXLib.Pooling.SpecializedPools;
@@ -119,7 +120,8 @@ internal static class ReflectionUtils
                 _ => name
             };
 
-            using var poolObject = StringBuilderPool.Instance.Get(out var sb);
+            //mc++ using var poolObject = StringBuilderPool.Instance.Get(out var sb);
+            var sb = ZString.CreateStringBuilder();
             sb.Append(name);
             sb.Append("Of");
             foreach (var genType in type.GetGenericArguments()) sb.Append(GetTypeFriendlyName(genType));

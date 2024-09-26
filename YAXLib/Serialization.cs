@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+using Cysharp.Text;
 using YAXLib.Attributes;
 using YAXLib.Caching;
 using YAXLib.Customization;
@@ -1176,7 +1177,8 @@ internal class Serialization
         string? format,
         IEnumerable collectionInst, UdtWrapper colItemsUdt, string separator)
     {
-        using var pooledObject = StringBuilderPool.Instance.Get(out var sb);
+        //mc++ using var pooledObject = StringBuilderPool.Instance.Get(out var sb);
+        var sb = ZString.CreateStringBuilder();
 
         var isFirst = true;
         foreach (var obj in collectionInst)
@@ -1196,7 +1198,8 @@ internal class Serialization
             }
             else
             {
-                sb.AppendFormat(_serializer.Options.Culture, "{0}{1}", separator, objToAdd);
+                //mc++ sb.AppendFormat(_serializer.Options.Culture, "{0}{1}", separator, objToAdd);
+                sb.AppendFormat("{0}{1}", separator, objToAdd);
             }
         }
 

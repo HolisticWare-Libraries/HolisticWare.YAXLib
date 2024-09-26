@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Globalization;
+using Cysharp.Text;
 using YAXLib.Enums;
 using YAXLib.Exceptions;
 using YAXLib.Pooling.SpecializedPools;
@@ -87,7 +88,8 @@ public class YAXParsingErrors
     /// </returns>
     public override string ToString()
     {
-        using var pooledObject = StringBuilderPool.Instance.Get(out var sb);
+        //mc++ using var pooledObject = StringBuilderPool.Instance.Get(out var sb);
+        var sb = ZString.CreateStringBuilder();
 
         _listExceptions.ForEach(pair =>
         {
