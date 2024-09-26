@@ -1,2 +1,0 @@
-# HolisticWare.YAXLib
-HolisticWare.YAXLib
